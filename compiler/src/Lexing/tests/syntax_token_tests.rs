@@ -23,5 +23,5 @@ mod syntax_token_tests {
         assert_eq!(location.column, 13);
         assert_eq!(location.line_and_column(), (10, 13));
     }
-    // We don't need to explicitly test the syntax token because it's being tested when we test the lexer.
+    // We don't need to explicitly test the syntax token because it's being tested when we test the Lexing.
 }

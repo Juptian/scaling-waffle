@@ -27,7 +27,7 @@ impl Lexer {
         if  !vec.is_empty() {
             let mut final_vec = Vec::new();
             for i in vec {
-                final_vec.push(char::from(i))
+                final_vec.push(i)
             }
 
             Lexer {
@@ -57,15 +57,11 @@ impl Lexer {
     }
 
     fn peek(&self, offset: usize) -> char {
-        if let Some(c) = self.file.get(self.idx + offset).cloned()  {
-            c
-        } else {
-            char::default()  // \x00
-        }
+        self.file.get(self.idx + offset).cloned().unwrap_or_default()
     }
 
     fn expect(&mut self, expected: SyntaxKind) -> bool {
-        let char = char::from(self.peek(0));
+        let char = self.peek(0);
         if let Some(actual) = SyntaxKind::from_char(char) {
             self.idx += 1;
             actual == expected
@@ -135,7 +131,7 @@ impl Lexer {
                 //
                 // We should never hit this section unless something went wrong
                 // Everything should either
-                // *    match on one character and turn into a token
+                // *    Match on one character and turn into a token
                 // *    Match on one character, and read ahead to turn into a different token
                 // *    Neither of the above
                 //      * Then they should be some form of string
@@ -194,7 +190,7 @@ impl Lexer {
     fn vec_to_str(&self, v: Vec<char>) -> String {
         let mut result = Vec::new();
         for i in v {
-            result.push(char::from(i).to_string());
+            result.push(i.to_string());
         }
         result.join("")
     }
@@ -208,6 +204,17 @@ impl fmt::Display for LexerToken {
         let _ = f.write_str(", Location : ");
         let _ = f.write_str(self.location.to_string().as_str());
         Ok(())
+    }
+}
+
+impl Clone for LexerToken {
+    fn clone(&self) -> Self {
+        LexerToken {
+            kind: SyntaxKind::from_str(self.data.as_str()).unwrap(),
+            data: self.data.clone(),
+            location: self.location.clone(),
+            length: self.length,
+        }
     }
 }
 

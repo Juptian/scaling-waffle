@@ -80,6 +80,15 @@ mod lexer_tests {
         assert_eq!(lexer.tokens.front().unwrap().kind, SyntaxKind::CharKeyword);
         assert_eq!(lexer.file.len(), str.len());
         assert_eq!(lexer.tokens.len(), 1);
+
+
+        let str = "void";
+        let mut lexer = Lexer::new(str);
+        lexer.lex();
+
+        assert_eq!(lexer.tokens.front().unwrap().kind, SyntaxKind::VoidKeyword);
+        assert_eq!(lexer.file.len(), str.len());
+        assert_eq!(lexer.tokens.len(), 1);
     }
 
     #[test]

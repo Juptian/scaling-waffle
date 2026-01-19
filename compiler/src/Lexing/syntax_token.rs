@@ -8,6 +8,7 @@ pub enum SyntaxKind {
     IntKeyword,
     CharKeyword,
     ReturnKeyword,
+    VoidKeyword,
 
     // LITERALS
     NumberLiteral,
@@ -73,10 +74,20 @@ impl SyntaxKind {
             "==" => Some(EqualEqual),
             "return" => Some(ReturnKeyword),
             "char" => Some(CharKeyword),
-            _ => None
+            "void" => Some(VoidKeyword),
+            _ => Some(StringLiteral)
+        }
+    }
+
+    pub fn is_type_keyword(s: &SyntaxKind) -> bool {
+        match s {
+            SyntaxKind::IntKeyword |
+            SyntaxKind::CharKeyword => true,
+            &_ => false
         }
     }
 }
+
 
 
 pub struct Location {
